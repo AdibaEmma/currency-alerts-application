@@ -3,6 +3,7 @@ package com.aweperi.bayzatbeengineeringassignment.mapper.currency
 import com.aweperi.bayzatbeengineeringassignment.dto.CurrencyRequest
 import com.aweperi.bayzatbeengineeringassignment.mapper.Mapper
 import com.aweperi.bayzatbeengineeringassignment.model.Currency
+import com.benasher44.uuid.Uuid
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
@@ -15,8 +16,8 @@ class CurrencyRequestMapper: Mapper<CurrencyRequest, Currency> {
             source.currentPrice,
             source.enabled,
             LocalDateTime.now(),
+            Uuid.randomUUID().toString(),
             null,
-            null
         )
     }
 

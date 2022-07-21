@@ -1,4 +1,4 @@
-package com.aweperi.bayzatbeengineeringassignment.exceptions
+package com.aweperi.bayzatbeengineeringassignment.error_handling.exceptions
 
 class UnsupportedCurrencyCreationException: RuntimeException {
     constructor() : super("Unsupported Currency Value.")

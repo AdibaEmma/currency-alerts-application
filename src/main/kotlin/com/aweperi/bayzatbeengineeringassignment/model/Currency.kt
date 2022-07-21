@@ -1,14 +1,17 @@
 package com.aweperi.bayzatbeengineeringassignment.model
 
+import com.benasher44.uuid.Uuid
 import org.hibernate.annotations.CreationTimestamp
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.*
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType.IDENTITY
+import javax.persistence.Id
 
 @Entity
-class Currency (
+class Currency(
     var name: String,
     var symbol: String,
     var currentPrice: BigDecimal = BigDecimal.ZERO,
@@ -17,5 +20,6 @@ class Currency (
     @CreationTimestamp
     @Column(updatable = false)
     var createdTime: LocalDateTime = LocalDateTime.now(),
-    @Id @GeneratedValue(strategy = IDENTITY) var id: Long?
+    var uuid: String?,
+    @Id @GeneratedValue(strategy = IDENTITY) var currencyId: Long?
 )

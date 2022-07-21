@@ -1,38 +1,57 @@
 package com.aweperi.bayzatbeengineeringassignment.service
 
+import com.aweperi.bayzatbeengineeringassignment.dto.CurrencyRequest
+import com.aweperi.bayzatbeengineeringassignment.error_handling.exceptions.CurrencyNotFoundException
+import com.aweperi.bayzatbeengineeringassignment.error_handling.exceptions.DuplicateCurrencyException
+import com.aweperi.bayzatbeengineeringassignment.error_handling.exceptions.IllegalCurrencyPriceException
 import com.aweperi.bayzatbeengineeringassignment.model.Currency
 import com.aweperi.bayzatbeengineeringassignment.repository.CurrencyRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import org.springframework.util.Assert
+import java.math.BigDecimal
 
 @Service
 class CurrencyServiceImpl(@Autowired private val currencyRepository: CurrencyRepository) : CurrencyService {
 
     override fun addCurrency(currency: Currency): Currency {
-        TODO("Not yet implemented")
+        val foundCurrency = this.currencyRepository.findBySymbolOrName(currency.symbol, null)
+        if (foundCurrency != null) throw DuplicateCurrencyException()
+
+        return if (currency.currentPrice >= BigDecimal.ZERO) currencyRepository.save(currency) else
+                throw IllegalCurrencyPriceException()
     }
 
     override fun fetchCurrencies(): List<Currency> {
-        TODO("Not yet implemented")
+        return this.currencyRepository.findAll().sortedBy { it.createdTime }
     }
 
-    override fun getCurrency(value: Any): Currency {
-        TODO("Not yet implemented")
+    override fun getCurrencyById(currencyId: Long): Currency {
+        return this.currencyRepository.findByIdOrNull(currencyId) ?: throw CurrencyNotFoundException()
     }
 
-    override fun updateCurrency(currencyId: Long) {
-        TODO("Not yet implemented")
+    override fun getCurrencyBySymbol(symbol: String): Currency {
+        return this.currencyRepository.findBySymbolOrName(symbol, null) ?: throw CurrencyNotFoundException()
     }
 
-    override fun toggleCurrencyStatus(currencyId: Long): Currency {
-        TODO("Not yet implemented")
+    override fun updateCurrency(currencyId: Long, updateRequest: CurrencyRequest) {
+        val foundCurrency = this.getCurrencyById(currencyId)
+        foundCurrency.name = updateRequest.name
+        foundCurrency.symbol = updateRequest.symbol
+        foundCurrency.currentPrice = updateRequest.currentPrice
+        foundCurrency.enabled = updateRequest.enabled
+
+        currencyRepository.save(foundCurrency)
+    }
+
+    override fun disableCurrency(currencyId: Long): Currency {
+        val foundCurrency = this.getCurrencyById(currencyId)
+        foundCurrency.enabled = false
+        return currencyRepository.save(foundCurrency)
     }
 
     override fun deleteCurrency(currencyId: Long) {
-        TODO("Not yet implemented")
+        this.getCurrencyById(currencyId)
+        currencyRepository.deleteById(currencyId)
     }
-
-    fun findCurrencyById(currencyId: Long): Currency? =  this.currencyRepository.findByIdOrNull(currencyId)
 }
