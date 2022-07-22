@@ -3,6 +3,7 @@ package com.aweperi.bayzatbeengineeringassignment.controller
 import com.aweperi.bayzatbeengineeringassignment.controller.facade.CurrencyServiceFacade
 import com.aweperi.bayzatbeengineeringassignment.dto.CurrencyRequest
 import com.aweperi.bayzatbeengineeringassignment.dto.CurrencyResponse
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

@@ -1,18 +1,18 @@
 package com.aweperi.bayzatbeengineeringassignment.model
 
-import com.benasher44.uuid.Uuid
 import org.hibernate.annotations.CreationTimestamp
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType.IDENTITY
+import javax.persistence.GenerationType.AUTO
 import javax.persistence.Id
 
 @Entity
 class Currency(
     var name: String,
+    @Column(unique = true)
     var symbol: String,
     var currentPrice: BigDecimal = BigDecimal.ZERO,
     var enabled: Boolean = true,
@@ -21,5 +21,5 @@ class Currency(
     @Column(updatable = false)
     var createdTime: LocalDateTime = LocalDateTime.now(),
     var uuid: String?,
-    @Id @GeneratedValue(strategy = IDENTITY) var currencyId: Long?
+    @Id @GeneratedValue(strategy = AUTO) var currencyId: Long?
 )

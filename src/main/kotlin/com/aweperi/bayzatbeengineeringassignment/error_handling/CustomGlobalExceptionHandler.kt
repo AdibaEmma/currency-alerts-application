@@ -65,16 +65,17 @@ class CustomGlobalExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(value = [UnsupportedCurrencyCreationException::class])
-    @ResponseStatus(value = HttpStatus.CONFLICT)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     fun handleUnsupportedCurrencyCreationException(ex: UnsupportedCurrencyCreationException): ErrorMessage {
         logger.error(ex.message)
-        return ErrorMessage(HttpStatus.NOT_FOUND.value(), Date(),
+        return ErrorMessage(HttpStatus.BAD_REQUEST.value(), Date(),
             "Currency Creation Error", ex.message)
     }
 
     @ExceptionHandler(value = [ClassNotFoundException::class])
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     fun classNotFoundException(ex: ClassNotFoundException): ErrorMessage {
+        logger.error(ex.message)
         return ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR.value(),
             Date(),
             "An unknown error occurred",

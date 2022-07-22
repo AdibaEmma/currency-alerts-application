@@ -13,7 +13,7 @@ object ResponseHandler {
         jsonResponse["message"] = message
         jsonResponse["payload"] = payload
         if (payload == null) jsonResponse["payload"] = null
-        logger.info(jsonResponse.toString())
+        logger.info("Response: $jsonResponse")
         return ResponseEntity.status(statusCode).body(jsonResponse)
     }
 }
