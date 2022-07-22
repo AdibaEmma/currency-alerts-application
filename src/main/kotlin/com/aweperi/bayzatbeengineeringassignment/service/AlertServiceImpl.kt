@@ -13,8 +13,8 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 
 @Service
-class AlertServiceImpl(@Autowired private val alertRepository: AlertRepository,
-                       @Autowired private val currencyRepository: CurrencyRepository): AlertService {
+class AlertServiceImpl(private val alertRepository: AlertRepository,
+                        private val currencyRepository: CurrencyRepository): AlertService {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun createAlert(currencySymbol: String, alertRequest: Alert): Alert {

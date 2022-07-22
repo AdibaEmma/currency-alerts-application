@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
 @Service
-class CurrencyServiceImpl(@Autowired private val currencyRepository: CurrencyRepository) : CurrencyService {
+class CurrencyServiceImpl(private val currencyRepository: CurrencyRepository) : CurrencyService {
     private val unsupportedCurrencies = listOf("ETH", "LTC", "ZKN", "MRD", "LPR", "GBZ")
 
     override fun addCurrency(currency: Currency): Currency {
