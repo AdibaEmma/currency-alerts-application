@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface AlertRepository: JpaRepository<Alert, Long>
+interface AlertRepository: JpaRepository<Alert, Long> {
+    fun findAllByCurrency_Symbol(currencySymbol: String): List<Alert>
+}

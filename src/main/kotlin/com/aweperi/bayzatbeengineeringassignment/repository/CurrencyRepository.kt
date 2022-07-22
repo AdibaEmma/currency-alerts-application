@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface CurrencyRepository: JpaRepository<Currency, Long> {
-    fun findBySymbolOrName(symbol: String?, name: String?): Currency?
+    fun findBySymbol(symbol: String): Currency?
 }

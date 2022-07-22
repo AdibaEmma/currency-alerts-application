@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
-import java.util.function.Predicate
 
 @Service
 class CurrencyServiceImpl(@Autowired private val currencyRepository: CurrencyRepository) : CurrencyService {
@@ -19,7 +18,7 @@ class CurrencyServiceImpl(@Autowired private val currencyRepository: CurrencyRep
 
     override fun addCurrency(currency: Currency): Currency {
         if(unsupportedCurrencies.contains(currency.symbol)) throw UnsupportedCurrencyCreationException()
-        val foundCurrency = this.currencyRepository.findBySymbolOrName(currency.symbol, null)
+        val foundCurrency = this.currencyRepository.findBySymbol(currency.symbol)
         if (foundCurrency != null) throw DuplicateCurrencyException()
 
         return if (currency.currentPrice >= BigDecimal.ZERO) currencyRepository.save(currency) else
@@ -35,7 +34,7 @@ class CurrencyServiceImpl(@Autowired private val currencyRepository: CurrencyRep
     }
 
     override fun getCurrencyBySymbol(symbol: String): Currency {
-        return this.currencyRepository.findBySymbolOrName(symbol, null) ?: throw CurrencyNotFoundException()
+        return this.currencyRepository.findBySymbol(symbol) ?: throw CurrencyNotFoundException()
     }
 
     override fun updateCurrency(currencyId: Long, updateRequest: CurrencyRequest) {

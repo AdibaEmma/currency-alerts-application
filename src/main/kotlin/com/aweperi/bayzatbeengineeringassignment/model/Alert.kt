@@ -10,10 +10,12 @@ class Alert(
     @OneToOne
     var currency: Currency?,
     var targetPrice: BigDecimal,
+
+    @Enumerated(value = EnumType.STRING)
     var status: AlertStatus,
 
     @CreationTimestamp
     @Column(updatable = false)
     var createdAt: LocalDateTime,
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) var alertId: Long?
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var alertId: Long?
 )

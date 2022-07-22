@@ -1,16 +1,14 @@
 package com.aweperi.bayzatbeengineeringassignment.service
 
-import com.aweperi.bayzatbeengineeringassignment.dto.AlertRequest
 import com.aweperi.bayzatbeengineeringassignment.model.Alert
-import java.math.BigDecimal
+import com.aweperi.bayzatbeengineeringassignment.model.AlertStatus
 
 interface AlertService {
-    fun createAlert(currencyId: Long, alertRequest: AlertRequest): Alert
-    fun getAlerts(): List<AlertRequest>
-    fun getAlertsByCurrencySymbol(currencySymbol: String): List<AlertRequest>
+    fun createAlert(currencySymbol: String, alertRequest: Alert): Alert
+    fun getAlerts(): List<Alert>
+    fun getAlertsByCurrencySymbol(currencySymbol: String): List<Alert>
     fun getAlert(alertId: Long): Alert
-    fun updateAlert(alertId: Long, updateAlertRequest: AlertRequest)
-    fun cancelAlert(alertId: Long)
-    fun acknowledgeAlert(alertId: Long): Alert
+    fun updateAlert(alertId: Long, updateAlertRequest: Alert)
+    fun toggleAlertStatus(alertId: Long, alertStatus: AlertStatus): Alert
     fun deleteAlert(alertId: Long)
 }

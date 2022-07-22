@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType.AUTO
+import javax.persistence.GenerationType.IDENTITY
 import javax.persistence.Id
 
 @Entity
@@ -21,5 +21,5 @@ class Currency(
     @Column(updatable = false)
     var createdTime: LocalDateTime = LocalDateTime.now(),
     var uuid: String?,
-    @Id @GeneratedValue(strategy = AUTO) var currencyId: Long?
+    @Id @GeneratedValue(strategy = IDENTITY) var currencyId: Long?
 )
