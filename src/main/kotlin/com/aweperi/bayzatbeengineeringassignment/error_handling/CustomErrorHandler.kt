@@ -73,6 +73,13 @@ class CustomErrorHandler : ResponseEntityExceptionHandler() {
             ex.localizedMessage, request.getDescription(false))
     }
 
+    @ExceptionHandler(RoleExistsException::class)
+    fun handleRoleExistsException(ex: RoleExistsException, request: WebRequest): ErrorMessage {
+        logger.error(ex.localizedMessage)
+        return ErrorMessage(HttpStatus.BAD_REQUEST.value(), Date(),
+            ex.localizedMessage, request.getDescription(false))
+    }
+
     @ExceptionHandler(ClassNotFoundException::class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     fun classNotFoundException(ex: ClassNotFoundException, request: WebRequest): ErrorMessage {
