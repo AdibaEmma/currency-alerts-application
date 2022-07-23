@@ -33,8 +33,8 @@ class User(
         this.roles += role
     }
 
-    override fun getAuthorities(): Collection<GrantedAuthority?> {
-        val authorities: MutableCollection<SimpleGrantedAuthority?> = ArrayList()
+    override fun getAuthorities(): Collection<GrantedAuthority> {
+        val authorities: MutableCollection<SimpleGrantedAuthority> = ArrayList()
         this.roles.forEach { role -> authorities.add(SimpleGrantedAuthority(role.name)) }
         return authorities
     }
