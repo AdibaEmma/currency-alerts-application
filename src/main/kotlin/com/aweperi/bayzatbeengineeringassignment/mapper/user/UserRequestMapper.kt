@@ -12,6 +12,7 @@ class UserRequestMapper: Mapper<UserRequest, User> {
             Uuid.randomUUID().toString(),
             source.firstName,
             source.lastName,
+            source.username,
             source.email,
             source.password
         )

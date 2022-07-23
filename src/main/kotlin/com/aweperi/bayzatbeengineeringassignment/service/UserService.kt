@@ -7,9 +7,9 @@ interface UserService {
     fun userSignUp(user: User): User
     fun getUsers(): List<User>
     fun getUser(username: String): User
-    fun getUserRoles(username: String): List<Role>
-    fun updateUser(username: String, user: User)
-    fun updateUserRole(username: String, role: Role)
+    fun getUserRoles(username: String): Set<Role>
+    fun updateUser(username: String, userUpdateRequest: Map<String, Any>)
+    fun updateUserRole(username: String, roleName: String)
     fun disableUser(username: String)
     fun deleteUser(username: String)
 }

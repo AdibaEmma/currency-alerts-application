@@ -1,12 +1,16 @@
-package com.aweperi.bayzatbeengineeringassignment.security
+package com.aweperi.bayzatbeengineeringassignment.config
 
 import com.aweperi.bayzatbeengineeringassignment.security.config.SecurityProperties
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 @Configuration
-class PasswordEncoder(val securityProperties: SecurityProperties) {
+@EnableConfigurationProperties(SecurityProperties::class)
+class AppConfiguration(
+    private val securityProperties: SecurityProperties
+) {
     @Bean
     fun bCryptPasswordEncoder(): BCryptPasswordEncoder = BCryptPasswordEncoder(securityProperties.strength)
 }

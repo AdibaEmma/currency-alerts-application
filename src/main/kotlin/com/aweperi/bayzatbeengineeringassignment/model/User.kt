@@ -11,31 +11,32 @@ class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    val userId: Long?,
+    var userId: Long?,
     var uuid: String,
-    val firstName: String,
-    val lastName: String,
-    private val email: String,
-    private val password: String,
-    private val locked: Boolean = false,
-    private val enabled: Boolean = false,
+    var firstName: String,
+    var lastName: String,
+    var email: String,
+    private var username: String,
+    private var password: String,
+    private var locked: Boolean = false,
+    private var enabled: Boolean = true,
 ) :
     UserDetails {
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.MERGE])
     @JoinTable(name = "user_roles",
         joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "role_id")])
-    private var roles: List<Role> = ArrayList()
+    var roles: Set<Role>? = null
 
     fun addRoleToUser(role: Role) {
-        if (this.roles.contains(role)) throw RoleExistsException("user already has $role.name role")
-        this.roles += role
+        if (this.roles?.contains(role)!!) throw RoleExistsException("user already has $role.name role")
+        this.roles = this.roles?.plus(role)
     }
 
     override fun getAuthorities(): Collection<GrantedAuthority> {
         val authorities: MutableCollection<SimpleGrantedAuthority> = ArrayList()
-        this.roles.forEach { role -> authorities.add(SimpleGrantedAuthority(role.name)) }
+        this.roles?.forEach { role -> authorities.add(SimpleGrantedAuthority(role.name)) }
         return authorities
     }
 
@@ -43,8 +44,16 @@ class User(
         return this.password
     }
 
+    fun setPassword(newPassword: String) {
+        this.password = newPassword
+    }
+
     override fun getUsername(): String {
-        return this.email!!
+        return this.username
+    }
+
+    fun setUsername(newUsername: String) {
+        this.username = newUsername
     }
 
     override fun isAccountNonExpired(): Boolean {
@@ -61,5 +70,9 @@ class User(
 
     override fun isEnabled(): Boolean {
         return this.enabled
+    }
+
+    fun toggleEnabled(enabled: Boolean) {
+        this.enabled = enabled
     }
 }

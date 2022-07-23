@@ -2,7 +2,8 @@ package com.aweperi.bayzatbeengineeringassignment.security.filter
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.aweperi.bayzatbeengineeringassignment.security.config.AuthConfig
+import com.aweperi.bayzatbeengineeringassignment.security.config.SecurityProperties
+import com.benasher44.uuid.Uuid
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
@@ -21,9 +22,8 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Component
-class CustomAuthorizationFilter : OncePerRequestFilter() {
+class CustomAuthorizationFilter(private val securityProperties: SecurityProperties) : OncePerRequestFilter() {
     private val logger = LoggerFactory.getLogger(javaClass)
-    var jwtSecret: String = AuthConfig.getSecret()
 
     @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(
@@ -31,19 +31,20 @@ class CustomAuthorizationFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain,
     ) {
+        securityProperties.secret = Uuid.randomUUID().toString()
+
         if (request.servletPath == "/api/v1/login") {
             filterChain.doFilter(request, response)
         } else {
             val authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION)
-            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            if (authorizationHeader != null && authorizationHeader.startsWith(securityProperties.tokenPrefix)) {
                 try {
-                    val token = authorizationHeader.substring("Bearer ".length)
-                    val algorithm = Algorithm.HMAC256(jwtSecret.toByteArray())
+                    val token = authorizationHeader.substring(securityProperties.tokenPrefix.length)
+                    val algorithm = Algorithm.HMAC256(securityProperties.secret.toByteArray())
                     val verifier = JWT.require(algorithm).build()
                     val decodedJWT = verifier.verify(token)
                     val username = decodedJWT.subject
-                    val roles = decodedJWT.getClaim("roles").asArray(
-                        String::class.java)
+                    val roles = decodedJWT.getClaim("roles").asArray(String::class.java)
                     val authorities: MutableCollection<SimpleGrantedAuthority> = ArrayList()
                     Arrays.stream(roles).forEach { role: String? ->
                         authorities.add(SimpleGrantedAuthority(role))
