@@ -11,22 +11,23 @@ class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private val userId: Long?,
+    val userId: Long?,
+    var uuid: String,
+    val firstName: String,
+    val lastName: String,
+    private val email: String,
+    private val password: String,
     private val locked: Boolean = false,
     private val enabled: Boolean = false,
-    private val firstName: String?,
-    private val lastName: String?,
-    private val email: String?,
-    private val password: String,
 ) :
     UserDetails {
-
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
         joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "role_id")])
     private var roles: List<Role> = ArrayList()
+
     fun addRoleToUser(role: Role) {
         if (this.roles.contains(role)) throw RoleExistsException("user already has $role.name role")
         this.roles += role
