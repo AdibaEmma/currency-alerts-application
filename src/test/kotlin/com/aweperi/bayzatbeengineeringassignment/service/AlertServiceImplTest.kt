@@ -5,17 +5,14 @@ import com.aweperi.bayzatbeengineeringassignment.model.AlertStatus
 import com.aweperi.bayzatbeengineeringassignment.model.Currency
 import com.aweperi.bayzatbeengineeringassignment.repository.AlertRepository
 import com.aweperi.bayzatbeengineeringassignment.repository.CurrencyRepository
-import com.benasher44.uuid.Uuid
 import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.any
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.util.*
 
 internal class AlertServiceImplTest {
     private val alertRepository = mockk<AlertRepository>(relaxed = true)
@@ -28,7 +25,7 @@ internal class AlertServiceImplTest {
         BigDecimal.valueOf(200.0),
         true,
         LocalDateTime.now(),
-        Uuid.randomUUID().toString(),
+        UUID.randomUUID().toString(),
         1
     )
 
@@ -38,7 +35,7 @@ internal class AlertServiceImplTest {
     BigDecimal.valueOf(100.0),
     true,
     LocalDateTime.now(),
-    Uuid.randomUUID().toString(),
+    UUID.randomUUID().toString(),
     2
     )
 

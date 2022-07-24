@@ -2,7 +2,6 @@ package com.aweperi.bayzatbeengineeringassignment.service
 
 import com.aweperi.bayzatbeengineeringassignment.model.Currency
 import com.aweperi.bayzatbeengineeringassignment.repository.CurrencyRepository
-import com.benasher44.uuid.Uuid
 import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockk
@@ -10,6 +9,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.util.*
 
 internal class CurrencyServiceImplTest {
     private val currencyRepository = mockk<CurrencyRepository>(relaxed = true)
@@ -23,7 +23,7 @@ internal class CurrencyServiceImplTest {
             BigDecimal.valueOf(200.0),
             true,
             LocalDateTime.now(),
-            Uuid.randomUUID().toString(),
+            UUID.randomUUID().toString(),
             1
         ),
         Currency(
@@ -32,7 +32,7 @@ internal class CurrencyServiceImplTest {
             BigDecimal.valueOf(100.0),
             true,
             LocalDateTime.now(),
-            Uuid.randomUUID().toString(),
+            UUID.randomUUID().toString(),
             2
         )
     )

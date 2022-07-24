@@ -12,3 +12,7 @@ class BayzatBeEngineeringAssignmentApplication
 fun main(args: Array<String>) {
     runApplication<BayzatBeEngineeringAssignmentApplication>(*args)
 }
+
+fun configureApplication(builder: SpringApplicationBuilder): SpringApplicationBuilder {
+    return builder.sources(BayzatBeEngineeringAssignmentApplication::class.java)
+}

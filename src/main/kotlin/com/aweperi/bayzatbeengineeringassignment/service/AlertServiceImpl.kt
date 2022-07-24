@@ -53,7 +53,7 @@ class AlertServiceImpl(private val alertRepository: AlertRepository,
                 foundAlert.status = AlertStatus.CANCELED
         if(alertStatus == AlertStatus.ACKED)
             if(foundAlert.status == AlertStatus.TRIGGERRED)
-            foundAlert.status = AlertStatus.ACKED
+                foundAlert.status = AlertStatus.ACKED
         return this.alertRepository.save(foundAlert)
     }
 

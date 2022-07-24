@@ -17,5 +17,9 @@ class Alert(
     @CreationTimestamp
     @Column(updatable = false)
     var createdAt: LocalDateTime,
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var alertId: Long?
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var alertId: Long?,
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    var user: User? = null
 )
