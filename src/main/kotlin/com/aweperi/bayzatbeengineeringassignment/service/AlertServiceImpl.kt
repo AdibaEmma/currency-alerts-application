@@ -2,6 +2,7 @@ package com.aweperi.bayzatbeengineeringassignment.service
 
 import com.aweperi.bayzatbeengineeringassignment.error_handling.exceptions.AlertNotFoundException
 import com.aweperi.bayzatbeengineeringassignment.error_handling.exceptions.CurrencyNotFoundException
+import com.aweperi.bayzatbeengineeringassignment.error_handling.exceptions.InvalidStatusTransitionException
 import com.aweperi.bayzatbeengineeringassignment.error_handling.exceptions.UserNotFoundException
 import com.aweperi.bayzatbeengineeringassignment.model.Alert
 import com.aweperi.bayzatbeengineeringassignment.model.AlertStatus
@@ -12,20 +13,23 @@ import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import java.math.BigDecimal
 
 @Service
-class AlertServiceImpl(private val alertRepository: AlertRepository,
-                        private val currencyRepository: CurrencyRepository,
-                        private val userRepository: UserRepository
-): AlertService {
+class AlertServiceImpl(
+    private val alertRepository: AlertRepository,
+    private val currencyRepository: CurrencyRepository,
+    private val userRepository: UserRepository,
+) : AlertService {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun createAlert(userId: Long, currencySymbol: String, alertRequest: Alert): Alert {
         val foundCurrency = this.currencyRepository.findBySymbol(currencySymbol)
 
-        if(foundCurrency != null)
-            if(alertRequest.targetPrice <= foundCurrency.currentPrice) alertRequest.currency = foundCurrency
-                else throw IllegalArgumentException("target price must be greater than current price of currency")
+        if (foundCurrency.isPresent)
+            if (alertRequest.targetPrice >= foundCurrency.get().currentPrice) alertRequest.currency =
+                foundCurrency.get()
+            else throw IllegalArgumentException("target price must be greater than current price of currency")
         else throw CurrencyNotFoundException()
         val foundUser = this.userRepository.findByIdOrNull(userId) ?: throw UserNotFoundException()
         alertRequest.user = foundUser
@@ -46,21 +50,29 @@ class AlertServiceImpl(private val alertRepository: AlertRepository,
         return this.alertRepository.findByIdOrNull(alertId) ?: throw AlertNotFoundException()
     }
 
-    override fun updateAlert(alertId: Long, updateAlertRequest: Alert) {
+    override fun updateAlert(alertId: Long, updateRequest: Map<String, Any>): Alert {
         val foundAlert = this.getAlert(alertId)
-        foundAlert.targetPrice = updateAlertRequest.targetPrice
-        foundAlert.status = updateAlertRequest.status
-        this.alertRepository.save(foundAlert)
+        updateRequest.forEach { (change: String?, value: Any?) ->
+            when (change) {
+                "targetPrice" -> foundAlert.targetPrice = value as BigDecimal
+                "status" -> {
+                    if (value == AlertStatus.CANCELED)
+                        if (foundAlert.status != AlertStatus.TRIGGERRED)
+                            foundAlert.status = AlertStatus.CANCELED
+                        else throw InvalidStatusTransitionException()
+                    if (value == AlertStatus.ACKED)
+                        if (foundAlert.status == AlertStatus.TRIGGERRED)
+                            foundAlert.status = AlertStatus.ACKED
+                        else throw InvalidStatusTransitionException()
+                }
+            }
+        }
+        return this.alertRepository.save(foundAlert)
     }
 
     override fun toggleAlertStatus(alertId: Long, alertStatus: AlertStatus): Alert {
         val foundAlert = this.getAlert(alertId)
-        if(alertStatus == AlertStatus.CANCELED)
-            if(foundAlert.status != AlertStatus.TRIGGERRED)
-                foundAlert.status = AlertStatus.CANCELED
-        if(alertStatus == AlertStatus.ACKED)
-            if(foundAlert.status == AlertStatus.TRIGGERRED)
-                foundAlert.status = AlertStatus.ACKED
+
         return this.alertRepository.save(foundAlert)
     }
 

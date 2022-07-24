@@ -31,9 +31,9 @@ class AlertController(@Autowired private val alertServiceFacade: AlertServiceFac
     }
 
     @PutMapping("/{alertId}")
-    fun updateAlert(@PathVariable("alertId") alertId: Long, @RequestBody alertRequest: AlertRequest): ResponseEntity<*> {
+    fun updateAlert(@PathVariable("alertId") alertId: Long, @RequestBody updateRequest: Map<String, Any>): ResponseEntity<*> {
         return ResponseHandler.handleResponseBody(HttpStatus.OK, "Update successful",
-            alertServiceFacade.updateAlert(alertId, alertRequest))
+            alertServiceFacade.updateAlert(alertId, updateRequest))
     }
 
     @PatchMapping("/{alertId}")

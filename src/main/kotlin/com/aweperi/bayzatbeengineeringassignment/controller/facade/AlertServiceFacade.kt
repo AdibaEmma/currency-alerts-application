@@ -32,9 +32,8 @@ class AlertServiceFacade(
         return alertResponseMapper.transform(alertService.getAlert(alertId))
     }
 
-    fun updateAlert(alertId: Long, alertRequest: AlertRequest) {
-        val transformedRequest = alertRequestMapper.transform(alertRequest)
-        return alertService.updateAlert(alertId, transformedRequest)
+    fun updateAlert(alertId: Long, updateRequest: Map<String, Any>) {
+        return alertService.updateAlert(alertId, updateRequest)
     }
 
     fun toggleAlertStatus(alertId: Long, status: AlertStatus): AlertResponse {

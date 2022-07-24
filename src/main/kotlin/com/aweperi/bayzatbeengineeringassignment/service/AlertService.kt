@@ -8,7 +8,7 @@ interface AlertService {
     fun getAlerts(): List<Alert>
     fun getAlertsByCurrencySymbol(currencySymbol: String): List<Alert>
     fun getAlert(alertId: Long): Alert
-    fun updateAlert(alertId: Long, updateAlertRequest: Alert)
+    fun updateAlert(alertId: Long,  updateRequest: Map<String, Any>): Alert
     fun toggleAlertStatus(alertId: Long, alertStatus: AlertStatus): Alert
     fun deleteAlert(alertId: Long)
 }

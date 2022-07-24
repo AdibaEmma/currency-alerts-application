@@ -8,7 +8,7 @@ interface CurrencyService {
     fun fetchCurrencies(): List<Currency>
     fun getCurrencyById(currencyId: Long): Currency
     fun getCurrencyBySymbol(symbol: String): Currency
-    fun updateCurrency(currencyId: Long, updateRequest: CurrencyRequest)
+    fun updateCurrency(currencyId: Long, updateRequest: Map<String, Any>)
     fun disableCurrency(currencyId: Long): Currency
     fun deleteCurrency(currencyId: Long)
 }

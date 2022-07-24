@@ -32,7 +32,7 @@ class CurrencyServiceFacade(@Autowired private val currencyRequestMapper: Curren
         return currencyResponseMapper.transform(currencyService.getCurrencyBySymbol(symbol))
     }
 
-    fun updateCurrency(currencyId: Long, updateRequest: CurrencyRequest) {
+    fun updateCurrency(currencyId: Long, updateRequest: Map<String, Any>) {
         currencyService.updateCurrency(currencyId, updateRequest)
     }
 
