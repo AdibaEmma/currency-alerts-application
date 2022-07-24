@@ -5,7 +5,7 @@ server:
     include-binding-errors: always
     include-stacktrace: never
 jwt-security:
-  secret: PseudoSecret-Pseudosecret-MY-OWN-JWT-SECRET-KEY-PseudoSecret-Pseudosecret
+  secret: PseudoSecret-Pseudosecret-BAYZAT-Backend-Eng-Assignement-PseudoSecret-Pseudosecret
   expiration-time: 365
 
 
@@ -35,7 +35,12 @@ spring:
     init:
       mode: always
       continue-on-error: true
-      data-locations: classpath:db/data.sql
+      data-locations: classpath:db/V2__data.sql
+  flyway:
+    baseline-on-migrate: true
+    validate-on-migrate: false
+    out-of-order: true
+    locations: classpath:db/migration
 logging:
   level:
     org:

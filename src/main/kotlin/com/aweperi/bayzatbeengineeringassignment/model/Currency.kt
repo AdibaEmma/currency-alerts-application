@@ -12,14 +12,16 @@ import javax.persistence.Id
 @Entity
 class Currency(
     var name: String,
-    @Column(unique = true)
     var symbol: String,
+    @Column(name = "current_price")
     var currentPrice: BigDecimal = BigDecimal.ZERO,
     var enabled: Boolean = true,
 
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(name = "created_time", updatable = false)
     var createdTime: LocalDateTime = LocalDateTime.now(),
     var uuid: String?,
-    @Id @GeneratedValue(strategy = IDENTITY) var currencyId: Long?
+    @Id @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "currency_id")
+    var currencyId: Long?
 )

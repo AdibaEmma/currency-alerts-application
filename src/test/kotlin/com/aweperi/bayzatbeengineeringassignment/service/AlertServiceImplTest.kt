@@ -5,6 +5,7 @@ import com.aweperi.bayzatbeengineeringassignment.model.AlertStatus
 import com.aweperi.bayzatbeengineeringassignment.model.Currency
 import com.aweperi.bayzatbeengineeringassignment.repository.AlertRepository
 import com.aweperi.bayzatbeengineeringassignment.repository.CurrencyRepository
+import com.aweperi.bayzatbeengineeringassignment.repository.UserRepository
 import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockk
@@ -16,8 +17,9 @@ import java.util.*
 
 internal class AlertServiceImplTest {
     private val alertRepository = mockk<AlertRepository>(relaxed = true)
+    private val userRepository = mockk<UserRepository>(relaxed = true)
     private val currencyRepository = mockk<CurrencyRepository>(relaxed = true)
-    private val alertService = AlertServiceImpl(alertRepository, currencyRepository)
+    private val alertService = AlertServiceImpl(alertRepository, currencyRepository, userRepository)
     private var symbolSlot = CapturingSlot<String>()
     private val cardona = Currency(
         "Cardano",
@@ -45,6 +47,7 @@ internal class AlertServiceImplTest {
             BigDecimal.valueOf(250.00),
             AlertStatus.TRIGGERRED,
             LocalDateTime.now(),
+            null,
             1
         ),
         Alert(
@@ -52,6 +55,7 @@ internal class AlertServiceImplTest {
             BigDecimal.valueOf(1000.00),
             AlertStatus.CANCELED,
             LocalDateTime.now(),
+            null,
             2
         ),
         Alert(
@@ -59,6 +63,7 @@ internal class AlertServiceImplTest {
             BigDecimal.valueOf(400.00),
             AlertStatus.NEW,
             LocalDateTime.now(),
+            null,
             3
         )
     )

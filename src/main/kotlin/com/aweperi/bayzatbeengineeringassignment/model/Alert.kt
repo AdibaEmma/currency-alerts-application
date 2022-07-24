@@ -4,22 +4,27 @@ import org.hibernate.annotations.CreationTimestamp
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import javax.persistence.*
+import javax.persistence.GenerationType.IDENTITY
 
 @Entity
+@Table(name = "currency_alert")
 class Alert(
     @OneToOne
     var currency: Currency?,
+    @Column(name = "target_price")
     var targetPrice: BigDecimal,
 
     @Enumerated(value = EnumType.STRING)
     var status: AlertStatus,
 
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(name = "created_at", updatable = false)
     var createdAt: LocalDateTime,
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var alertId: Long?,
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    var user: User? = null
+    var user: User? = null,
+
+    @Id @GeneratedValue(strategy = IDENTITY)
+    var alertId: Long?
 )

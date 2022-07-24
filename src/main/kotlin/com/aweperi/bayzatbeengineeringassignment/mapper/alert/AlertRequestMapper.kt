@@ -15,6 +15,7 @@ class AlertRequestMapper: Mapper<AlertRequest, Alert> {
             source.targetPrice,
             AlertStatus.NEW,
             LocalDateTime.now(),
+            null,
             null
             )
     }
