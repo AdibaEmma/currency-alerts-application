@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("api/v1/alerts")
+@RequestMapping("api/v1/users/{userId}/alerts")
 class AlertController(@Autowired private val alertServiceFacade: AlertServiceFacade) {
     @PostMapping
-    fun createAlert(@Valid @RequestBody alertRequest: AlertRequest, @RequestParam("currencySymbol") currencySymbol: String): ResponseEntity<*> {
+    fun createAlert(@PathVariable("userId") userId: Long, @Valid @RequestBody alertRequest: AlertRequest, @RequestParam("currencySymbol") currencySymbol: String): ResponseEntity<*> {
         return ResponseHandler.handleResponseBody(HttpStatus.CREATED,"New alert created",
-        alertServiceFacade.createAlert(currencySymbol, alertRequest))
+        alertServiceFacade.createAlert(userId, currencySymbol, alertRequest))
     }
 
     @GetMapping

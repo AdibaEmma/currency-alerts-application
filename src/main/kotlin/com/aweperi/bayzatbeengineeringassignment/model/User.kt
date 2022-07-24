@@ -31,4 +31,9 @@ class User(
 
     @OneToMany(mappedBy = "user")
     var alerts: List<Alert>? = null,
-)
+
+) {
+    fun addUserAlert(alert: Alert) {
+        this.alerts = this.alerts?.plus(alert)
+    }
+}

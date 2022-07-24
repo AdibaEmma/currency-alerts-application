@@ -10,13 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-class AlertServiceFacade(@Autowired private val alertService: AlertService,
-                         @Autowired private val alertRequestMapper: AlertRequestMapper,
-                         @Autowired private val alertResponseMapper: AlertResponseMapper
+class AlertServiceFacade(
+    @Autowired private val alertService: AlertService,
+    @Autowired private val alertRequestMapper: AlertRequestMapper,
+    @Autowired private val alertResponseMapper: AlertResponseMapper,
 ) {
-    fun createAlert(currencySymbol: String, alertRequest: AlertRequest): AlertResponse {
+    fun createAlert(userId: Long, currencySymbol: String, alertRequest: AlertRequest): AlertResponse {
         val transformedRequest = alertRequestMapper.transform(alertRequest)
-        return alertResponseMapper.transform(alertService.createAlert(currencySymbol, transformedRequest))
+        return alertResponseMapper.transform(alertService.createAlert(userId, currencySymbol, transformedRequest))
     }
 
     fun getAlerts(): List<AlertResponse> {
