@@ -57,14 +57,18 @@ class AlertServiceImpl(
             when (change) {
                 "targetPrice" -> foundAlert.targetPrice = BigDecimal.valueOf(value as Double)
                 "status" -> {
-                    if (value == AlertStatus.CANCELED)
+                    val status: AlertStatus = AlertStatus.valueOf(value as String)
+
+                    if (status == AlertStatus.CANCELED)
                         if (foundAlert.status != AlertStatus.TRIGGERRED)
                             foundAlert.status = AlertStatus.CANCELED
                         else throw InvalidStatusTransitionException()
-                    if (value == AlertStatus.ACKED)
+                    if (status == AlertStatus.ACKED)
                         if (foundAlert.status == AlertStatus.TRIGGERRED)
                             foundAlert.status = AlertStatus.ACKED
                         else throw InvalidStatusTransitionException()
+
+                    foundAlert.status = status
                 }
             }
         }

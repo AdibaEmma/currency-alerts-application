@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("api/v1/users/{userId}/alerts")
 @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+@Validated
 class AlertController(@Autowired private val alertServiceFacade: AlertServiceFacade) {
     @PostMapping
     @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
@@ -21,7 +23,7 @@ class AlertController(@Autowired private val alertServiceFacade: AlertServiceFac
     }
 
     @GetMapping
-    fun findAlertsByCurrencySymbol(@PathVariable("userId") userId: Long, @RequestParam("currencySymbol") currencySymbol: String?): ResponseEntity<*> {
+    fun findAlertsByCurrencySymbol(@PathVariable("userId") userId: Long, @RequestParam("currencySymbol", required = false) currencySymbol: String?): ResponseEntity<*> {
         return ResponseHandler.handleResponseBody(HttpStatus.OK, "Fetch successful",
             alertServiceFacade.getAlerts(userId, currencySymbol))
     }

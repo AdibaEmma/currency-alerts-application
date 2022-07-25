@@ -72,14 +72,14 @@ internal class AlertServiceImplTest {
     fun `should return list of alerts when call getAlerts`() {
         every {alertRepository.findAll() } returns alerts
 
-        assertThat(alertService.getAlerts(, null)).allMatch { it.currency!!.symbol.isNotBlank() }
+        assertThat(alertService.getAlerts(1, null)).allMatch { it.currency!!.symbol.isNotBlank() }
     }
 
     @Test
     fun `should return list of alerts with a given currency symbol`() {
 
-        every { alertService.getAlertsByCurrencySymbol(, capture(symbolSlot)) } returns alerts
+        every { alertService.getAlertsByCurrencySymbol(1, capture(symbolSlot)) } returns alerts
 
-        assertThat(alertService.getAlertsByCurrencySymbol(, "ADA")).containsOnlyOnce(alerts[1])
+        assertThat(alertService.getAlertsByCurrencySymbol(1, "ADA")).containsOnlyOnce(alerts[1])
     }
 }

@@ -55,7 +55,7 @@ internal class AlertControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `should return list of related currencies as json`() {
         val currencySymbol = "ADA"
 
-        every { alertService.getAlertsByCurrencySymbol(, capture(symbolSlot)) } returns alertsWithADACurrencySymbol
+        every { alertService.getAlertsByCurrencySymbol(1, capture(symbolSlot)) } returns alertsWithADACurrencySymbol
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/1/alerts")
             .contentType(MediaType.APPLICATION_JSON)
