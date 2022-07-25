@@ -1,5 +1,5 @@
 # Currency Alerts Application
-A kotlin springboot application
+A kotlin springboot application with jwt authentication that allows users to create currencies and create alerts for a traget price of the currency
 
 ## Scenario
 BayzTracker is a cryptocurrency tracker app which allows its users to create alerts to be notified when a price of a coin reaches the price user determines.
