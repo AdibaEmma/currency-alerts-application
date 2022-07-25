@@ -22,21 +22,18 @@ class CurrencyController(@Autowired private val currencyServiceFacade: CurrencyS
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     fun getAllCurrencies(): ResponseEntity<*> {
         return ResponseHandler.handleResponseBody(HttpStatus.OK,"Fetch successful",
             currencyServiceFacade.fetchCurrencies())
     }
 
     @GetMapping("/{currencyId}")
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     fun getCurrencyById(@PathVariable("currencyId") currencyId: Long): ResponseEntity<*> {
         return ResponseHandler.handleResponseBody(HttpStatus.FOUND,"Currency found",
             currencyServiceFacade.getCurrencyById(currencyId))
     }
 
     @GetMapping("/currency-by")
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     fun getCurrencyBySymbol(@RequestParam("symbol") symbol: String): ResponseEntity<*> {
             return ResponseHandler.handleResponseBody(HttpStatus.FOUND,"Currency found",
                 currencyServiceFacade.getBySymbol(symbol))
@@ -46,14 +43,14 @@ class CurrencyController(@Autowired private val currencyServiceFacade: CurrencyS
     @PreAuthorize("hasAuthority('ADMIN')")
     fun updateCurrency(@PathVariable("currencyId") currencyId: Long,
                         @Valid @RequestBody updateRequest: Map<String, Any>): ResponseEntity<*> {
-        return ResponseHandler.handleResponseBody(HttpStatus.FOUND,"Currency update successful",
+        return ResponseHandler.handleResponseBody(HttpStatus.OK,"Currency update successful",
             currencyServiceFacade.updateCurrency(currencyId, updateRequest))
     }
 
     @PatchMapping("/{currencyId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     fun disableCurrency(@PathVariable("currencyId") currencyId: Long): ResponseEntity<*> {
-        return ResponseHandler.handleResponseBody(HttpStatus.FOUND,"Currency disabled",
+        return ResponseHandler.handleResponseBody(HttpStatus.OK,"Currency disabled",
             currencyServiceFacade.disableCurrency(currencyId))
     }
 

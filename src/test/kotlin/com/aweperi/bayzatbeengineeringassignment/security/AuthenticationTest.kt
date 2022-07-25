@@ -16,6 +16,7 @@ import org.springframework.boot.test.web.client.postForEntity
 import org.springframework.http.*
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.math.BigDecimal
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -23,11 +24,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ActiveProfiles("test")
 internal class AuthenticationTest(@Autowired private val restTemplate: TestRestTemplate) {
     private val loginForm = hashMapOf("username" to "john.doe", "password" to "test1234")
-
+    private val currency = hashMapOf("name" to "cardona", "symbol" to "ADA",
+        "currentPrice" to BigDecimal.valueOf(200.00), "enabled" to true)
     @Test
     @Order(1)
     fun `should return status forbidden when ping any restricted url`() {
-        restTemplate.getForEntity<String>("/api/v1/currencies").also {
+        restTemplate.postForEntity<Any>("/api/v1/currencies", currency, MediaType.APPLICATION_JSON).also {
             assertNotNull(it)
             assertEquals(HttpStatus.FORBIDDEN, it.statusCode)
         }
@@ -78,28 +80,6 @@ internal class AuthenticationTest(@Autowired private val restTemplate: TestRestT
             assertNotNull(it)
             assertEquals(HttpStatus.OK, it.statusCode)
             assertThat(it.body).contains("payload")
-        }
-    }
-
-    @Test
-    @Order(5)
-    fun `should return status forbidden when ping restricted with a faulty bearer`() {
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.APPLICATION_JSON
-        headers["Authorization"] = "Bearer TOTALYWRONG"
-        var requestEntity = HttpEntity<String>(headers)
-
-        restTemplate.exchange("/api/v1/currencies", HttpMethod.GET, requestEntity, String::class.java).also {
-            assertNotNull(it)
-            assertEquals(HttpStatus.FORBIDDEN, it.statusCode)
-        }
-
-        headers["Authorization"] = "TOTALYWRONG"
-        requestEntity = HttpEntity(headers)
-
-        restTemplate.exchange("/api/v1/currencies", HttpMethod.GET, requestEntity, String::class.java).also {
-            assertNotNull(it)
-            assertEquals(HttpStatus.FORBIDDEN, it.statusCode)
         }
     }
 }

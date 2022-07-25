@@ -27,13 +27,13 @@ class User(
         joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "role_id")]
     )
-    var roles: Set<Role>? = null,
+    var roles: MutableSet<Role>? = null,
 
     @OneToMany(mappedBy = "user")
-    var alerts: List<Alert>? = null,
+    var alerts: MutableList<Alert>? = null,
 
 ) {
     fun addUserAlert(alert: Alert) {
-        this.alerts = this.alerts?.plus(alert)
+        this.alerts?.plusAssign(alert)
     }
 }

@@ -8,6 +8,7 @@ import com.aweperi.bayzatbeengineeringassignment.service.UserServiceImpl
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod.POST
+import org.springframework.http.HttpMethod.GET
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -40,6 +41,7 @@ class WebSecurityConfig(
             .antMatchers("/api/**").permitAll()
             .antMatchers("/error/**").permitAll()
             .antMatchers(POST, "/api/v1/login").permitAll()
+            .antMatchers(GET, "/api/v1/currencies/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilter(customAuthenticationFilter)

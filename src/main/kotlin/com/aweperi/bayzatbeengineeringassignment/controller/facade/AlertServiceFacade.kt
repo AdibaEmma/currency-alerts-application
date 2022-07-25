@@ -32,8 +32,8 @@ class AlertServiceFacade(
         return alertResponseMapper.transform(alertService.getAlert(alertId))
     }
 
-    fun updateAlert(alertId: Long, updateRequest: Map<String, Any>) {
-        return alertService.updateAlert(alertId, updateRequest)
+    fun updateAlert(alertId: Long, updateRequest: Map<String, Any>): AlertResponse {
+        return  alertResponseMapper.transform(alertService.updateAlert(alertId, updateRequest))
     }
 
     fun toggleAlertStatus(alertId: Long, status: AlertStatus): AlertResponse {

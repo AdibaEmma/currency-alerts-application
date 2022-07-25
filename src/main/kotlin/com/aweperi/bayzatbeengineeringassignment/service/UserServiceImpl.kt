@@ -1,26 +1,17 @@
 package com.aweperi.bayzatbeengineeringassignment.service
 
-import com.aweperi.bayzatbeengineeringassignment.error_handling.exceptions.DuplicateUsernameException
-import com.aweperi.bayzatbeengineeringassignment.error_handling.exceptions.UserNotFoundException
-import com.aweperi.bayzatbeengineeringassignment.model.Role
-import com.aweperi.bayzatbeengineeringassignment.model.User
 import com.aweperi.bayzatbeengineeringassignment.repository.UserRepository
-import com.aweperi.bayzatbeengineeringassignment.repository.UserRoleRepository
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
-import java.util.function.BiConsumer
 
 @Service
 class UserServiceImpl(
     private val userRepository: UserRepository,
-    private val userRoleRepository: UserRoleRepository,
-    private val bcryptPasswordEncoder: BCryptPasswordEncoder,
 ): UserDetailsService {
     @Throws(UsernameNotFoundException::class)
     override fun loadUserByUsername(s: String): UserDetails {

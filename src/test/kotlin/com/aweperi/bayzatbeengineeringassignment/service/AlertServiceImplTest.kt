@@ -43,7 +43,7 @@ internal class AlertServiceImplTest {
 
     private val alerts = listOf(
         Alert(
-            null,
+            tether,
             BigDecimal.valueOf(250.00),
             AlertStatus.TRIGGERRED,
             LocalDateTime.now(),
@@ -51,7 +51,7 @@ internal class AlertServiceImplTest {
             1
         ),
         Alert(
-            null,
+            cardona,
             BigDecimal.valueOf(1000.00),
             AlertStatus.CANCELED,
             LocalDateTime.now(),
@@ -59,7 +59,7 @@ internal class AlertServiceImplTest {
             2
         ),
         Alert(
-            null,
+            tether,
             BigDecimal.valueOf(400.00),
             AlertStatus.NEW,
             LocalDateTime.now(),
@@ -70,10 +70,6 @@ internal class AlertServiceImplTest {
 
     @Test
     fun `should return list of alerts when call getAlerts`() {
-        alerts[2].currency = tether
-        alerts[1].currency = cardona
-        alerts[0].currency = tether
-
         every {alertRepository.findAll() } returns alerts
 
         assertThat(alertService.getAlerts()).allMatch { it.currency!!.symbol.isNotBlank() }
@@ -81,9 +77,6 @@ internal class AlertServiceImplTest {
 
     @Test
     fun `should return list of alerts with a given currency symbol`() {
-        alerts[2].currency = tether
-        alerts[1].currency = cardona
-        alerts[0].currency = tether
 
         every { alertService.getAlertsByCurrencySymbol(capture(symbolSlot)) } returns alerts
 

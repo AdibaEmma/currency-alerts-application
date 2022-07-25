@@ -21,7 +21,7 @@ class Alert(
     @Column(name = "created_at", updatable = false)
     var createdAt: LocalDateTime,
 
-    @ManyToOne
+    @ManyToOne(targetEntity = User::class)
     @JoinColumn(name = "user_id")
     var user: User? = null,
 
