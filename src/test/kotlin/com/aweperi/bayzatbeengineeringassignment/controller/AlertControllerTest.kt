@@ -1,18 +1,14 @@
 package com.aweperi.bayzatbeengineeringassignment.controller
 
-import com.aweperi.bayzatbeengineeringassignment.dto.AlertRequest
 import com.aweperi.bayzatbeengineeringassignment.model.Alert
 import com.aweperi.bayzatbeengineeringassignment.model.AlertStatus
 import com.aweperi.bayzatbeengineeringassignment.model.Currency
 import com.aweperi.bayzatbeengineeringassignment.service.AlertService
-import com.aweperi.bayzatbeengineeringassignment.service.AlertServiceImpl
-import com.aweperi.bayzatbeengineeringassignment.service.CurrencyServiceImpl
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.verify
 import org.hamcrest.Matchers
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -59,7 +55,7 @@ internal class AlertControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `should return list of related currencies as json`() {
         val currencySymbol = "ADA"
 
-        every { alertService.getAlertsByCurrencySymbol(capture(symbolSlot)) } returns alertsWithADACurrencySymbol
+        every { alertService.getAlertsByCurrencySymbol(, capture(symbolSlot)) } returns alertsWithADACurrencySymbol
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/1/alerts")
             .contentType(MediaType.APPLICATION_JSON)

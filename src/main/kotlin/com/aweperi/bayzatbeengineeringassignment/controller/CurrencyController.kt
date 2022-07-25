@@ -39,7 +39,7 @@ class CurrencyController(@Autowired private val currencyServiceFacade: CurrencyS
                 currencyServiceFacade.getBySymbol(symbol))
     }
 
-    @PutMapping("/{currencyId}")
+    @PatchMapping("/{currencyId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     fun updateCurrency(@PathVariable("currencyId") currencyId: Long,
                         @Valid @RequestBody updateRequest: Map<String, Any>): ResponseEntity<*> {
@@ -47,7 +47,7 @@ class CurrencyController(@Autowired private val currencyServiceFacade: CurrencyS
             currencyServiceFacade.updateCurrency(currencyId, updateRequest))
     }
 
-    @PatchMapping("/{currencyId}")
+    @PutMapping("/{currencyId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     fun disableCurrency(@PathVariable("currencyId") currencyId: Long): ResponseEntity<*> {
         return ResponseHandler.handleResponseBody(HttpStatus.OK,"Currency disabled",

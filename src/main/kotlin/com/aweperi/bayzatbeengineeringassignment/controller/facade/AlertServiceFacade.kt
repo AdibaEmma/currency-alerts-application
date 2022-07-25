@@ -4,7 +4,6 @@ import com.aweperi.bayzatbeengineeringassignment.dto.AlertRequest
 import com.aweperi.bayzatbeengineeringassignment.dto.AlertResponse
 import com.aweperi.bayzatbeengineeringassignment.mapper.alert.AlertRequestMapper
 import com.aweperi.bayzatbeengineeringassignment.mapper.alert.AlertResponseMapper
-import com.aweperi.bayzatbeengineeringassignment.model.AlertStatus
 import com.aweperi.bayzatbeengineeringassignment.service.AlertService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -20,28 +19,24 @@ class AlertServiceFacade(
         return alertResponseMapper.transform(alertService.createAlert(userId, currencySymbol, transformedRequest))
     }
 
-    fun getAlerts(): List<AlertResponse> {
-        return alertService.getAlerts().map { alertResponseMapper.transform(it) }
+    fun getAlerts(userId: Long, currencySymbol: String?): List<AlertResponse> {
+        return alertService.getAlerts(userId, null).map { alertResponseMapper.transform(it) }
     }
 
-    fun getAlertsByCurrencySymbol(currencySymbol: String): List<AlertResponse> {
-        return alertService.getAlertsByCurrencySymbol(currencySymbol).map { alertResponseMapper.transform(it) }
+    fun getAlert(userId: Long, alertId: Long): AlertResponse {
+        return alertResponseMapper.transform(alertService.getAlert(userId, alertId))
     }
 
-    fun getAlert(alertId: Long): AlertResponse {
-        return alertResponseMapper.transform(alertService.getAlert(alertId))
+    fun updateAlert(userId: Long, alertId: Long, updateRequest: Map<String, Any>): AlertResponse {
+        return  alertResponseMapper.transform(alertService.updateAlert(userId, alertId, updateRequest))
     }
 
-    fun updateAlert(alertId: Long, updateRequest: Map<String, Any>): AlertResponse {
-        return  alertResponseMapper.transform(alertService.updateAlert(alertId, updateRequest))
+    fun toggleAlertStatus(userId: Long, alertId: Long, updateRequest: Map<String, Any>): AlertResponse {
+        return alertResponseMapper.transform(alertService.updateAlert(userId, alertId, updateRequest))
     }
 
-    fun toggleAlertStatus(alertId: Long, status: AlertStatus): AlertResponse {
-        return alertResponseMapper.transform(alertService.toggleAlertStatus(alertId, status))
-    }
-
-    fun deleteAlert(alertId: Long) {
-        return alertService.deleteAlert(alertId)
+    fun deleteAlert(userId: Long, alertId: Long) {
+        return alertService.deleteAlert(userId, alertId)
     }
 
 }

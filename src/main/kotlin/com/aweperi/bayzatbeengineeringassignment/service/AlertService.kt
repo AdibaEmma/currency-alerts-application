@@ -1,14 +1,12 @@
 package com.aweperi.bayzatbeengineeringassignment.service
 
 import com.aweperi.bayzatbeengineeringassignment.model.Alert
-import com.aweperi.bayzatbeengineeringassignment.model.AlertStatus
 
 interface AlertService {
     fun createAlert(userId: Long, currencySymbol: String, alertRequest: Alert): Alert
-    fun getAlerts(): List<Alert>
-    fun getAlertsByCurrencySymbol(currencySymbol: String): List<Alert>
-    fun getAlert(alertId: Long): Alert
-    fun updateAlert(alertId: Long,  updateRequest: Map<String, Any>): Alert
-    fun toggleAlertStatus(alertId: Long, alertStatus: AlertStatus): Alert
-    fun deleteAlert(alertId: Long)
+    fun getAlerts(userId: Long, currencySymbol: String?): List<Alert>
+    fun getAlertsByCurrencySymbol(userId: Long, currencySymbol: String): List<Alert>
+    fun getAlert(userId: Long, alertId: Long): Alert
+    fun updateAlert(userId: Long, alertId: Long, updateRequest: Map<String, Any>): Alert
+    fun deleteAlert(userId: Long, alertId: Long)
 }

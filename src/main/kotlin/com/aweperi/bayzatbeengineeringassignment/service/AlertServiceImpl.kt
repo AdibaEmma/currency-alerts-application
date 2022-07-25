@@ -37,24 +37,25 @@ class AlertServiceImpl(
         foundUser.addUserAlert(savedAlert)
         return savedAlert
     }
-
-    override fun getAlerts(): List<Alert> {
-        return this.alertRepository.findAll().toList()
+    override fun getAlerts(userId: Long, currencySymbol: String?): List<Alert> {
+        return if(currencySymbol != null ) this.getAlertsByCurrencySymbol(userId, currencySymbol)
+        else this.alertRepository.findAll().toList()
     }
 
-    override fun getAlertsByCurrencySymbol(currencySymbol: String): List<Alert> {
+    override fun getAlertsByCurrencySymbol(userId: Long, currencySymbol: String): List<Alert> {
         return this.alertRepository.findAllByCurrency_Symbol(currencySymbol)
     }
 
-    override fun getAlert(alertId: Long): Alert {
+    override fun getAlert(userId: Long, alertId: Long): Alert {
+        this.userRepository.findByIdOrNull(userId) ?: throw UserNotFoundException()
         return this.alertRepository.findByIdOrNull(alertId) ?: throw AlertNotFoundException()
     }
 
-    override fun updateAlert(alertId: Long, updateRequest: Map<String, Any>): Alert {
-        val foundAlert = this.getAlert(alertId)
+    override fun updateAlert(userId: Long, alertId: Long, updateRequest: Map<String, Any>): Alert {
+        val foundAlert = this.getAlert(userId, alertId)
         updateRequest.forEach { (change: String?, value: Any?) ->
             when (change) {
-                "targetPrice" -> foundAlert.targetPrice = value as BigDecimal
+                "targetPrice" -> foundAlert.targetPrice = BigDecimal.valueOf(value as Double)
                 "status" -> {
                     if (value == AlertStatus.CANCELED)
                         if (foundAlert.status != AlertStatus.TRIGGERRED)
@@ -70,14 +71,8 @@ class AlertServiceImpl(
         return this.alertRepository.save(foundAlert)
     }
 
-    override fun toggleAlertStatus(alertId: Long, alertStatus: AlertStatus): Alert {
-        val foundAlert = this.getAlert(alertId)
-
-        return this.alertRepository.save(foundAlert)
-    }
-
-    override fun deleteAlert(alertId: Long) {
-        this.getAlert(alertId)
+    override fun deleteAlert(userId: Long, alertId: Long) {
+        this.getAlert(userId, alertId)
         this.alertRepository.deleteById(alertId)
     }
 
