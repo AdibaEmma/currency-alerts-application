@@ -53,11 +53,11 @@ spring:
   datasource:
     password: root
     username: root
-    url: jdbc:mysql://host.docker.internal:3306/bauyzatbe?ssl-mode=REQUIRED
+    url: jdbc:mysql://host.docker.internal:3306/bayzatbe?ssl-mode=REQUIRED
   config:
     activate:
       on-profile: docker
 server:
   port: 8888
   servlet:
-    context-path: /starter-test
+    context-path: /

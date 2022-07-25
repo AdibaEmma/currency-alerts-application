@@ -12,11 +12,9 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("api/v1/users/{userId}/alerts")
-@PreAuthorize("hasAnyAuthority('USER','ADMIN')")
 @Validated
 class AlertController(@Autowired private val alertServiceFacade: AlertServiceFacade) {
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     fun createAlert(@PathVariable("userId") userId: Long, @Valid @RequestBody alertRequest: AlertRequest, @RequestParam("currencySymbol") currencySymbol: String): ResponseEntity<*> {
         return ResponseHandler.handleResponseBody(HttpStatus.CREATED,"New alert created",
         alertServiceFacade.createAlert(userId, currencySymbol, alertRequest))

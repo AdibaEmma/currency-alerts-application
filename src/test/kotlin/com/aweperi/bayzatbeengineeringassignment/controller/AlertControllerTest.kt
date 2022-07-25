@@ -29,6 +29,7 @@ internal class AlertControllerTest(@Autowired val mockMvc: MockMvc) {
     @MockkBean
     lateinit var alertService: AlertService
     private var symbolSlot = CapturingSlot<String>()
+    private var userIdSlot = CapturingSlot<Long>()
 
     private val cardona = Currency(
         "Cardano",
@@ -55,7 +56,7 @@ internal class AlertControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `should return list of related currencies as json`() {
         val currencySymbol = "ADA"
 
-        every { alertService.getAlertsByCurrencySymbol(1, capture(symbolSlot)) } returns alertsWithADACurrencySymbol
+        every { alertService.getAlerts(capture(userIdSlot), null) } returns alertsWithADACurrencySymbol
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/1/alerts")
             .contentType(MediaType.APPLICATION_JSON)
@@ -72,7 +73,7 @@ internal class AlertControllerTest(@Autowired val mockMvc: MockMvc) {
     @Test
     fun `should create an alert`() {
         val currencySymbol = "ADA"
-        every { alertService.createAlert (1,capture(symbolSlot), any()) } returns alertsWithADACurrencySymbol[0]
+        every { alertService.createAlert (capture(userIdSlot),capture(symbolSlot), any()) } returns alertsWithADACurrencySymbol[0]
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/1/alerts")
             .contentType(MediaType.APPLICATION_JSON)
